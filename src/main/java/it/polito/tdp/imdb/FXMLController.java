@@ -7,6 +7,7 @@ package it.polito.tdp.imdb;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.imdb.model.Director;
 import it.polito.tdp.imdb.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,6 +19,7 @@ import javafx.scene.control.TextField;
 public class FXMLController {
 	
 	private Model model;
+	
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -35,10 +37,10 @@ public class FXMLController {
     private Button btnCercaAffini; // Value injected by FXMLLoader
 
     @FXML // fx:id="boxAnno"
-    private ComboBox<?> boxAnno; // Value injected by FXMLLoader
+    private ComboBox<Integer> boxAnno; // Value injected by FXMLLoader
 
     @FXML // fx:id="boxRegista"
-    private ComboBox<?> boxRegista; // Value injected by FXMLLoader
+    private ComboBox<Director> boxRegista; // Value injected by FXMLLoader
 
     @FXML // fx:id="txtAttoriCondivisi"
     private TextField txtAttoriCondivisi; // Value injected by FXMLLoader
@@ -49,6 +51,14 @@ public class FXMLController {
     @FXML
     void doCreaGrafo(ActionEvent event) {
 
+    	this.txtResult.clear();
+    	int year = boxAnno.getValue();
+    	this.model.creaGrafo(year);
+    	txtResult.appendText("GRAFO CREATO!!\n\n");
+    	txtResult.appendText("# VERTICI: " + this.model.getNVertici());
+    	txtResult.appendText("# ARCHI: " + this.model.getNArchi());
+    	this.boxRegista.getItems().addAll(this.model.getAllVertices());
+   
     }
 
     @FXML
@@ -76,6 +86,8 @@ public class FXMLController {
    public void setModel(Model model) {
     	
     	this.model = model;
+    	Integer array[] = {2004, 2005, 2006};
+    	boxAnno.getItems().addAll(array);
     	
     }
     
