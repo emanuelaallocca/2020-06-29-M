@@ -16,7 +16,7 @@ public class Model {
 	private Graph <Director, DefaultWeightedEdge> grafo;
 	private ImdbDAO dao;
 	private Map <Integer, Director> idMap;
-	
+	private List<Director> direttori ;
 	
 	public Model() {
 		dao = new ImdbDAO();
@@ -26,7 +26,7 @@ public class Model {
 	public void creaGrafo(int year) {
 		grafo = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 		
-		List<Director> direttori = dao.listAllDirectorsByYear(year, idMap);
+		direttori = dao.listAllDirectorsByYear(year, idMap);
 		
 		Graphs.addAllVertices(grafo, idMap.values());
 		
@@ -58,14 +58,40 @@ public class Model {
 		
 
 	}
-	public Set<Director> getAllVertices(){
-		return this.grafo.vertexSet();
+	public List<Director> getAllVertices(){
+		List <Director> dire = new ArrayList<Director>(direttori);
+		Collections.sort(dire, new ComparatoreDiDire());
+		return dire;
 	}
 	public int getNVertici() {
 		return this.grafo.vertexSet().size();
 	}
 	public int getNArchi() {
 		return this.grafo.edgeSet().size();
+	}
+	
+	public String getRegistiAdiacenti(Director d){
+		
+		List <Director>adiacenze = new ArrayList<Director>(Graphs.neighborListOf(this.grafo, idMap.get(d.getId())));
+		
+		Collections.sort(adiacenze, new Comparatore(this.grafo, d));
+		
+		String finale = "";
+		for (Director dic : adiacenze) {
+			int peso = (int) this.grafo.getEdgeWeight(this.grafo.getEdge(idMap.get(d.getId()), idMap.get(dic.getId())));
+			finale = finale+dic.toString()+" "+peso+"\n";
+		}
+		return finale;
+//		Map <String, Director> map= new TreeMap<String, Director>();
+//		
+//		for (Director dir: adiacenze) {
+//			DefaultWeightedEdge e = this.grafo.getEdge(idMap.get(d.getId()), idMap.get(dir.getId()));
+//			map.put(dir.getId()+"_"+this.grafo.getEdgeWeight(e), dir);
+//		}
+//		
+//		List <Director> di = (List<Director>) map.values();
+//		//return Collections.reverse(di);
+//		return null;
 	}
 	
 

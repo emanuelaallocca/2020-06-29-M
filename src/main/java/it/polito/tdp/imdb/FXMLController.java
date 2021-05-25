@@ -4,6 +4,7 @@
 
 package it.polito.tdp.imdb;
 
+import java.util.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -55,15 +56,21 @@ public class FXMLController {
     	int year = boxAnno.getValue();
     	this.model.creaGrafo(year);
     	txtResult.appendText("GRAFO CREATO!!\n\n");
-    	txtResult.appendText("# VERTICI: " + this.model.getNVertici());
+    	txtResult.appendText("# VERTICI: " + this.model.getNVertici()+"\n");
     	txtResult.appendText("# ARCHI: " + this.model.getNArchi());
     	this.boxRegista.getItems().addAll(this.model.getAllVertices());
+    	
    
     }
 
     @FXML
     void doRegistiAdiacenti(ActionEvent event) {
 
+    	Director d = this.boxRegista.getValue();
+    	//List<Director> registiAd = this.model.getRegistiAdiacenti(d);
+    	//for (Director dir : registiAd)
+    	txtResult.appendText("\n");
+    		txtResult.appendText(this.model.getRegistiAdiacenti(d));
     }
 
     @FXML
